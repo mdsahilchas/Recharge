@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recharge Portal</title>
+<style>
+body { font-family: Arial, sans-serif; background:#f0f2f5; margin:0; padding:0;}
+.container { max-width: 900px; margin:30px auto; background:#fff; padding:30px; border-radius:10px; box-shadow:0 0 15px rgba(0,0,0,0.1);}
+h1 { text-align:center; color:#007bff;}
+label { display:block; margin:15px 0 5px; font-weight:bold;}
+input, select, textarea { width:100%; padding:10px; border-radius:5px; border:1px solid #ccc;}
+textarea { resize:vertical; }
+button { background:#28a745; color:white; padding:15px 25px; border:none; border-radius:5px; cursor:pointer; font-size:16px; margin-top:20px;}
+button:hover { background:#218838;}
+.popup { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:999;}
+.popup-content { background:#fff; padding:30px; border-radius:10px; text-align:center; max-width:400px; position:relative;}
+.popup-content h2 { margin-bottom:15px; color:#28a745;}
+.whatsapp-btn { position:absolute; bottom:-25px; right:30px; background:#25D366; color:#fff; border-radius:50%; width:50px; height:50px; display:flex; justify-content:center; align-items:center; font-size:24px; cursor:pointer; text-decoration:none;}
+.home-whatsapp { position:fixed; bottom:20px; right:20px; background:#25D366; color:#fff; border-radius:50%; width:60px; height:60px; display:flex; justify-content:center; align-items:center; font-size:30px; cursor:pointer; text-decoration:none; z-index:999;}
+.payment-qr { text-align:center; margin:20px 0;}
+.payment-qr img { width:250px; height:250px; border-radius:10px; border:1px solid #ccc;}
+.payment-qr p { font-size:14px; color:#555; margin-top:5px;}
+@media (max-width:600px){ .container{ padding:20px; } .payment-qr img { width:200px; height:200px; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>Recharge Portal</h1>
+<form id="rechargeForm">
+<label for="mobile">Mobile Number</label>
+<input type="tel" id="mobile" placeholder="Enter Mobile Number" required pattern="[0-9]{10}">
+
+<label for="sim">Select SIM</label>
+<select id="sim" required>
+    <option value="">Select SIM</option>
+    <option value="Jio">Jio</option>
+    <option value="Airtel">Airtel</option>
+    <option value="VI">VI</option>
+    <option value="BSNL">BSNL</option>
+</select>
+
+<label for="state">Select State</label>
+<select id="state" required>
+    <option value="">Select State</option>
+    <option value="Jharkhand">Jharkhand</option>
+    <option value="Andhra Pradesh">Andhra Pradesh</option>
+    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+    <option value="Assam">Assam</option>
+    <option value="Bihar">Bihar</option>
+    <option value="Chhattisgarh">Chhattisgarh</option>
+    <option value="Goa">Goa</option>
+    <option value="Gujarat">Gujarat</option>
+    <option value="Haryana">Haryana</option>
+    <option value="Himachal Pradesh">Himachal Pradesh</option>
+    <option value="Karnataka">Karnataka</option>
+    <option value="Kerala">Kerala</option>
+    <option value="Madhya Pradesh">Madhya Pradesh</option>
+    <option value="Maharashtra">Maharashtra</option>
+    <option value="Manipur">Manipur</option>
+    <option value="Meghalaya">Meghalaya</option>
+    <option value="Mizoram">Mizoram</option>
+    <option value="Nagaland">Nagaland</option>
+    <option value="Odisha">Odisha</option>
+    <option value="Punjab">Punjab</option>
+    <option value="Rajasthan">Rajasthan</option>
+    <option value="Sikkim">Sikkim</option>
+    <option value="Tamil Nadu">Tamil Nadu</option>
+    <option value="Telangana">Telangana</option>
+    <option value="Tripura">Tripura</option>
+    <option value="Uttar Pradesh">Uttar Pradesh</option>
+    <option value="Uttarakhand">Uttarakhand</option>
+    <option value="West Bengal">West Bengal</option>
+</select>
+
+<label for="planDetails">Enter Plan Details</label>
+<textarea id="planDetails" placeholder="Enter your plan details here..." rows="4" required></textarea>
+
+<label for="utr">Enter UTR / Transaction ID</label>
+<input type="text" id="utr" placeholder="Enter UTR ID" required>
+
+<div class="payment-qr">
+    <label>Pay Here</label>
+    <a href="YOUR_PAYMENT_LINK_HERE" target="_blank">
+        <img src="https://via.placeholder.com/250x250.png?text=Scan+to+Pay" alt="Payment QR Code">
+    </a>
+    <p>Scan QR to pay. Enter UTR below after payment.</p>
+</div>
+
+<button type="submit">Submit Recharge</button>
+</form>
+</div>
+
+<!-- Popup -->
+<div class="popup" id="popup">
+    <div class="popup-content">
+        <h2>Request Sent!</h2>
+        <p>Please wait a few hours for your recharge to be successful.</p>
+        <a href="https://wa.me/919905960977" target="_blank" class="whatsapp-btn">💬</a>
+    </div>
+</div>
+
+<!-- Home WhatsApp button -->
+<a href="https://wa.me/919905960977" target="_blank" class="home-whatsapp">💬</a>
+
+<script>
+document.getElementById('rechargeForm').addEventListener('submit', function(e){
+    e.preventDefault();
+
+    const currentTime = new Date().toLocaleString('en-IN', { hour12: true });
+
+    let mobile = document.getElementById('mobile').value;
+    let sim = document.getElementById('sim').value;
+    let state = document.getElementById('state').value;
+    let planDetails = document.getElementById('planDetails').value;
+    let utr = document.getElementById('utr').value;
+
+    if(!mobile || !sim || !state || !planDetails || !utr){
+        alert("Please fill all required fields");
+        return;
+    }
+
+    const botToken = "7917612094:AAGX0Xq8rnWYaOrw-hL_QYyNnahfXT5Qjtw";
+    const chatId = "8071882970";
+    const msg = `New Recharge Request
+Time: ${currentTime}
+Mobile: ${mobile}
+SIM: ${sim}
+State: ${state}
+Plan Details: ${planDetails}
+UTR: ${utr}`;
+
+    fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(msg)}`)
+    .then(res=>res.json())
+    .then(data=>{
+        document.getElementById('popup').style.display = 'flex';
+        document.getElementById('rechargeForm').reset();
+    }).catch(err=>{
+        console.error(err);
+        alert("Error sending request");
+    });
+});
+</script>
+</body>
+</html>
